@@ -12,7 +12,7 @@ export async function jsx(): Promise<TypedFlatConfigItem[]> {
           },
         },
       },
-      name: 'antfu/jsx/setup',
+      name: 'notwoods/jsx/setup',
     },
   ]
 }

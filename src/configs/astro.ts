@@ -1,24 +1,23 @@
-import type { OptionsFiles, OptionsOverrides, OptionsStylistic, TypedFlatConfigItem } from '../types'
+import type { OptionsFiles, OptionsOverrides, TypedFlatConfigItem } from '../types'
 import { GLOB_ASTRO } from '../globs'
 import { interopDefault } from '../utils'
 
 export async function astro(
-  options: OptionsOverrides & OptionsStylistic & OptionsFiles = {},
+  options: OptionsOverrides & OptionsFiles = {},
 ): Promise<TypedFlatConfigItem[]> {
   const {
     files = [GLOB_ASTRO],
     overrides = {},
-    stylistic = true,
   } = options
 
   const [
     pluginAstro,
     parserAstro,
-    parserTs,
+    typescriptPlugin,
   ] = await Promise.all([
     interopDefault(import('eslint-plugin-astro')),
     interopDefault(import('astro-eslint-parser')),
-    interopDefault(import('@typescript-eslint/parser')),
+    (import('typescript-eslint')),
   ] as const)
 
   return [
@@ -35,7 +34,7 @@ export async function astro(
         parser: parserAstro,
         parserOptions: {
           extraFileExtensions: ['.astro'],
-          parser: parserTs,
+          parser: typescriptPlugin.parser,
         },
         sourceType: 'module',
       },
@@ -53,16 +52,6 @@ export async function astro(
         'astro/no-unused-define-vars-in-style': 'error',
         'astro/semi': 'off',
         'astro/valid-compile': 'error',
-
-        ...stylistic
-          ? {
-              'style/indent': 'off',
-              'style/jsx-closing-tag-location': 'off',
-              'style/jsx-indent': 'off',
-              'style/jsx-one-expression-per-line': 'off',
-              'style/no-multiple-empty-lines': 'off',
-            }
-          : {},
 
         ...overrides,
       },

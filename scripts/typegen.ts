@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import { flatConfigsToRulesDTS } from 'eslint-typegen/core'
 import { builtinRules } from 'eslint/use-at-your-own-risk'
-import { astro, combine, comments, formatters, imports, javascript, jsdoc, jsonc, jsx, markdown, node, perfectionist, react, regexp, solid, sortPackageJson, stylistic, svelte, test, toml, typescript, unicorn, unocss, vue, yaml } from '../src'
+import { astro, combine, comments, imports, javascript, jsx, node, react, regexp, svelte, test, typescript, unicorn } from '../src'
 
 const configs = await combine(
   {
@@ -13,28 +13,16 @@ const configs = await combine(
   },
   astro(),
   comments(),
-  formatters(),
   imports(),
   javascript(),
   jsx(),
-  jsdoc(),
-  jsonc(),
-  markdown(),
   node(),
-  perfectionist(),
   react(),
-  solid(),
-  sortPackageJson(),
-  stylistic(),
   svelte(),
   test(),
-  toml(),
   regexp(),
   typescript(),
   unicorn(),
-  unocss(),
-  vue(),
-  yaml(),
 )
 
 const configNames = configs.map(i => i.name).filter(Boolean) as string[]
